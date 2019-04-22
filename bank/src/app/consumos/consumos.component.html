@@ -1,0 +1,168 @@
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" routerLink="/dashboard">Web Bank</a>
+    <input class="form-control form-control-dark w-100" disabled="true" [(ngModel)]="user" name="user" aria-label="Search">
+    <ul class="navbar-nav px-3">
+      <li class="nav-item text-nowrap">
+        <a class="nav-link" routerLink="/login">Salir</a>
+      </li>
+    </ul>
+  </nav>
+  
+  <div class="container-fluid">
+    <div class="row">
+      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/dashboard">
+                <span data-feather="home"></span>
+                Inicio 
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/asesores">
+                <span data-feather="users"></span>
+                Gestión Asesores
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/clientes">
+                <span data-feather="users"></span>
+                Gestión Clientes
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/tarjetas">
+                <span data-feather="bar-chart-2"></span>
+                Gestión Tarjetas 
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" routerLink="/consumos">
+                <span data-feather="layers"></span>
+                Historial de consumos <span class="sr-only">(current)</span>
+              </a>
+            </li>
+          </ul>
+  
+        </div>
+      </nav>
+  
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <div align="center" >
+            <br/>
+            <h2>Gestión de Consumos</h2>
+          </div>
+        <form>
+            <div class="form-group">
+                <label for="tarjetas">Tarjeta </label>
+                <select class="form-control" id="tarjetas" [(ngModel)]="consumo.tarjeId_Tarjetas" name="tarjeId_Tarjetas">
+                   <option *ngFor="let tarjeta of listTarjetas" [ngValue]="tarjeta.tarjeId">Cliente: {{tarjeta.nombreCliente}} - Número de tarjeta: {{tarjeta.numeroTarjeta}}</option>
+                </select>
+              </div>
+      
+              <div class="mb-3">
+                  <label for="fechaConsumo">Fecha del Consumo</label>
+                  <input type="date" [(ngModel)]="consumo.fecha" name="fechaConsumo" class="form-control" id="fechaConsumo" placeholder="Fecha del Consumo">
+                  <div class="invalid-feedback">
+                    Por favor ingrese la fecha del consumo
+                  </div>
+              </div>
+
+              <div class="mb-3">
+                  <label for="montoConsumo">Monto</label>
+                  <input currencyMask [(ngModel)]="consumo.monto" name="montoConsumo" class="form-control" id="montoConsumo" maxlength="15"
+                         [options]="{ prefix: '$ ', thousands: '.', decimal: ',', align: 'left' }"  placeholder="$0.00">
+                  <div class="invalid-feedback">
+                    Por favor ingrese el monto del consumo
+                  </div>
+              </div>
+        
+              <div class="mb-3">
+                  <label for="descripcionConsumo">Descripción</label>
+                  <textarea id="textAreaDescripcionConsumo" [(ngModel)]="consumo.descripcion" name="descripcionConsumoTa" class="form-control"  maxlength="100" rows="3"></textarea>
+                  <div class="invalid-feedback">
+                    Por favor ingrese una descripción
+                  </div>
+              </div>
+
+
+              <hr class="mb-4">
+              <button class="btn btn-primary btn-lg btn-block" type="submit" (click)="guardar()">Guardar</button>
+              <button class="btn btn-danger btn-lg btn-block" type="submit" (click)="limpiar()">Limpiar</button>
+              
+              <div *ngIf="mensajeExito" class="styleMensaje">
+                  <div class="alert alert-primary alert-dismissible fade show " role="alert">
+                      <strong>{{mensajeExito}}</strong> 
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="cerrarSpan()">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+              </div>
+        
+              <div *ngIf="mensajeError" class="styleMensaje">
+                  <div class="alert alert-danger alert-dismissible fade show " role="alert">
+                      <strong>{{mensajeError}}</strong> 
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="cerrarSpan()">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+              </div>
+        
+              <div class="table-responsive top10table">
+                <div align="center" >
+                    <h2>Historial de Consumos</h2>
+                </div>
+                <table class="table table-striped table-sm">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Cliente</th>
+
+                      <th>Numero Tarjeta (CCV)</th>
+                      <th>Tipo de Tarjeta</th>
+
+                      <th>Fecha</th>
+                      <th>Monto</th>
+                      <th>Descripción</th>
+
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let consumo of listConsumos">
+                      <td>{{ consumo.tranId }}</td>
+                      <td>{{ consumo.nombreCliente }}</td>
+
+                      <td>{{ consumo.numeroTarjeta }} ({{ consumo.ccv }})</td>
+                      <td>{{ consumo.tipoTarjeta }}</td>
+
+                      <td>{{ consumo.fechaCadena }}</td>
+                      <td>{{ consumo.monto }}</td>
+                      <td>{{ consumo.descripcion }}</td>
+
+                      <td>
+                        <button (click)="borrar(consumo)">Eliminar</button>
+                        <button class="marginButton" (click)="selecccionarConsumo(consumo)">Editar</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+        </form>
+  
+      </main>
+  
+    </div>
+  </div>
+  
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <!-- Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+  <script>
+    feather.replace();
+  </script>

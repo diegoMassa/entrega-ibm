@@ -1,0 +1,4 @@
+FROM java:8
+EXPOSE 9090
+ADD /target/bancoibm-client.jar bancoibm-client.jar
+ENTRYPOINT ["java", "-jar", "bancoibm-client.jar"]

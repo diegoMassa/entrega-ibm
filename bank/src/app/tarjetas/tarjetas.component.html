@@ -1,0 +1,162 @@
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" routerLink="/dashboard">Web Bank</a>
+    <input class="form-control form-control-dark w-100" disabled="true" [(ngModel)]="user" name="user" aria-label="Search">
+    <ul class="navbar-nav px-3">
+      <li class="nav-item text-nowrap">
+        <a class="nav-link" routerLink="/login">Salir</a>
+      </li>
+    </ul>
+  </nav>
+  
+  <div class="container-fluid">
+    <div class="row">
+      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/dashboard">
+                <span data-feather="home"></span>
+                Inicio 
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/asesores">
+                <span data-feather="users"></span>
+                Gestión Asesores
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/clientes">
+                <span data-feather="users"></span>
+                Gestión Clientes
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" routerLink="/tarjetas">
+                <span data-feather="bar-chart-2"></span>
+                Gestión Tarjetas <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/consumos">
+                <span data-feather="layers"></span>
+                Historial de consumos
+              </a>
+            </li>
+            
+          </ul>
+  
+        </div>
+      </nav>
+  
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <div align="center" >
+            <br/>
+            <h2>Gestión de Tarjetas</h2>
+          </div>
+      
+     <form>
+      <div class="form-group">
+          <label for="clientes">Cliente </label>
+          <select class="form-control" id="clientes" [(ngModel)]="tarjeta.clieId_Clientes" name="clieId_Clientes">
+             <option *ngFor="let cliente of listClientes" [ngValue]="cliente.clieId">{{cliente.clieId}} - {{cliente.nombre}}</option>
+          </select>
+        </div>
+
+
+        <div class="mb-3">
+          <label for="numeroTarjeta">Número de la Tarjeta (CCV)</label>
+          <div class="form-row">
+            <div class="col-7">
+                <input type="text" [(ngModel)]="tarjeta.numeroTarjeta" name="numeroTarjeta" class="form-control" id="numeroTarjeta" placeholder="0000-0000-0000-0000" mask="0000-0000-0000-0000">
+            </div>
+            <div class="col">
+                <input type="text" [(ngModel)]="tarjeta.ccv" name="ccv" class="form-control" id="ccv" placeholder="CCV" mask="0000">
+            </div>
+          </div>
+          <div class="invalid-feedback">
+              Por favor ingrese un numero de la tarjeta y el CCV
+          </div>
+        </div>
+      
+
+        <div class="mb-3">
+            <label for="tipoTarjeta">Tipo de Tarjeta</label>
+            <input type="text" [(ngModel)]="tarjeta.tipoTarjeta" name="tipoTarjeta" maxlength="50" class="form-control" id="tipoTarjeta" placeholder="Tipo de Tarjeta">
+            <div class="invalid-feedback">
+              Por favor ingrese el tipo de tarjeta
+            </div>
+        </div>
+  
+        <hr class="mb-4">
+        <button class="btn btn-primary btn-lg btn-block" type="submit" (click)="guardar()">Guardar</button>
+        <button class="btn btn-danger btn-lg btn-block" type="submit" (click)="limpiar()">Limpiar</button>
+        
+        <div *ngIf="mensajeExito" class="styleMensaje">
+            <div class="alert alert-primary alert-dismissible fade show " role="alert">
+                <strong>{{mensajeExito}}</strong> 
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="cerrarSpan()">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+  
+        <div *ngIf="mensajeError" class="styleMensaje">
+            <div class="alert alert-danger alert-dismissible fade show " role="alert">
+                <strong>{{mensajeError}}</strong> 
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="cerrarSpan()">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+  
+        <div class="table-responsive top10table">
+          <div align="center" >
+              <h2>Lista de Tarjetas</h2>
+          </div>
+          <table class="table table-striped table-sm">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Cliente</th>
+                <th>Numero Tarjeta</th>
+                <th>CCV</th>
+                <th>Tipo de Tarjeta</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let tarjeta of listTarjetas">
+                <td>{{ tarjeta.tarjeId }}</td>
+                <td>{{ tarjeta.nombreCliente }}</td>
+                <td>{{ tarjeta.numeroTarjeta }}</td>
+                <td>{{ tarjeta.ccv }}</td>
+                <td>{{ tarjeta.tipoTarjeta }}</td>
+                <td>
+                  <button type="button" class="marginButton" title="Eliminar" (click)="borrar(tarjeta)">Eliminar</button>
+                  <button type="button" class="marginButton" title="Editar" (click)="selecccionarTarjeta(tarjeta)">Editar</button>
+                  <button type="button" class="marginButton" title="Ver Consumos" [routerLink]="['/detailTarjeta/', tarjeta.tarjeId]">Ver Consumos</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+  
+      </form>
+  
+      </main>
+  
+    </div>
+  </div>
+  
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <!-- Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+  <script>
+    feather.replace();
+  </script>

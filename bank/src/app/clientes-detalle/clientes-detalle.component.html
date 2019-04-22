@@ -1,0 +1,102 @@
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" routerLink="/dashboard">Web Bank</a>
+    <input class="form-control form-control-dark w-100" disabled="true" [(ngModel)]="user" name="user" aria-label="Search">
+    <ul class="navbar-nav px-3">
+      <li class="nav-item text-nowrap">
+        <a class="nav-link" routerLink="/login">Salir</a>
+      </li>
+    </ul>
+  </nav>
+  
+  <div class="container-fluid">
+    <div class="row">
+      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/dashboard">
+                <span data-feather="home"></span>
+                Inicio 
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/asesores">
+                <span data-feather="users"></span>
+                Gestión Asesores 
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" routerLink="/clientes">
+                <span data-feather="users"></span>
+                Gestión Clientes <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/tarjetas">
+                <span data-feather="bar-chart-2"></span>
+                Gestión Tarjetas
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/consumos">
+                <span data-feather="layers"></span>
+                Historial de consumos
+              </a>
+            </li>
+          </ul>
+  
+        </div>
+      </nav>
+  
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        
+        <br/>
+        
+        <form>
+            <div *ngIf="cliente">
+                <h2>Cliente: {{cliente.nombre | uppercase}} </h2>
+                <div><span>Dirección: </span>{{cliente.direccion}}</div>
+                <div><span>Ciudad: </span>{{cliente.ciudad}}</div>
+                <div><span>Teléfono: </span>{{cliente.telefono}}</div>         
+            </div>
+
+            <div class="table-responsive top10table">
+                <div align="center" >
+                    <h2>Tarjetas de Cliente</h2>
+                </div>
+
+                <table class="table table-striped table-sm">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Numero Tarjeta (CCV)</th>
+                      <th>Tipo de Tarjeta</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let tarjeta of listTarjetas">
+                      <td>{{ tarjeta.tarjeId }}</td>
+                      <td>{{ tarjeta.numeroTarjeta }} ({{ tarjeta.ccv }})</td>
+                      <td>{{ tarjeta.tipoTarjeta }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>      
+              <button class="btn btn-primary btn-lg btn-block" type="submit" (click)="goBack()">Volver</button>
+         </form>
+  
+      </main>
+  
+    </div>
+  </div>
+  
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <!-- Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+  <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+  <script>
+    feather.replace();
+  </script>

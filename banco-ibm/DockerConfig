@@ -1,0 +1,4 @@
+FROM java:8
+EXPOSE 8080
+ADD /target/banco-ibm.jar banco-ibm.jar
+ENTRYPOINT ["java", "-jar", "banco-ibm.jar"]
